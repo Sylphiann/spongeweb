@@ -17,9 +17,9 @@ def index(request):
 
 
 def result(request):
-    query = request.GET.get('query', '')  # Get the 'query' parameter from the GET request
+    query = request.GET.get('query', '') 
     context = {
         'query': query
     }
-    return render(request, 'result/result.html')
+    return render(request, 'result/result.html', context=context)
 

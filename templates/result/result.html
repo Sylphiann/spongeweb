@@ -1,7 +1,18 @@
 {% extends "base.html" %}
 
 {% block page_body %}
-<div class="search-container">
-    <h3> Placeholder for Result page </h3> 
+<div class="result-page">
+    <div class="search-container">
+    <form action="/result" method="get">
+        <input type="text" name="query" placeholder="Type to search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="result-container"></div>
+        <h3>Placeholder for Result page</h3>
+        {% if query %}
+            <p>You searched for: "{{ query }}"</p>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

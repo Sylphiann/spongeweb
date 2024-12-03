@@ -8,6 +8,19 @@ body {
     align-items: center;
     height: 100vh;
 }
+.result-page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    padding-top: 60px;
+}
+.result-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 40px;
+}
 .search-container {
     width: 100%;
     max-width: 400px;
@@ -20,7 +33,7 @@ body {
 }
 .search-container input[type="text"] {
     flex: 1;
-    padding: 10px;
+    padding: 12px 10px;
     border: none;
     outline: none;
 }
