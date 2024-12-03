@@ -9,6 +9,10 @@ def index(request):
 
 def result(request):
     query = request.GET.get('query', '') 
+
+    if (query == None) or (query == ''):
+        return render(request, 'index/index.html')
+
     context = {
         'query': query,
         'results': search(query)

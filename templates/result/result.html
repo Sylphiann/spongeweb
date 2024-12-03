@@ -9,18 +9,22 @@
     </form>
 
     <div class="result-container"></div>
-        <h3>Placeholder for Result page</h3>
         {% if query %}
             <p>You searched for: "{{ query }}"</p>
-        {% endif %}
 
         <div class="query-result">
             {% if results %}
                 {% for result in results %}
-                    <li>{{ result }}</li>
+                    <div class="result-item">
+                        <strong>{{ result.name }}</strong>
+                        <span>({{ result.type }})</span>
+                    </div>
                 {% endfor %}
+            {% else %}
+                <p>No results found.</p>
             {% endif %}
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
