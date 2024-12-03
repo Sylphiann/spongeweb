@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
 from SPARQLWrapper import SPARQLWrapper, JSON
 
@@ -13,9 +13,13 @@ def __query(query: str):
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index/index.html')
 
 
-def search(request):
-    pass
+def result(request):
+    query = request.GET.get('query', '')  # Get the 'query' parameter from the GET request
+    context = {
+        'query': query
+    }
+    return render(request, 'result/result.html')
 

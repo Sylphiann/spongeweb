@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block page_body %}
+<div class="search-container">
+    <form action="/result" method="get">
+        <input type="text" name="query" placeholder="Type to search...">
+        <button type="submit">Search</button>
+    </form>
+</div>
+{% endblock %}
