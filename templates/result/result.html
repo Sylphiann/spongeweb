@@ -13,6 +13,14 @@
         {% if query %}
             <p>You searched for: "{{ query }}"</p>
         {% endif %}
+
+        <div class="query-result">
+            {% if results %}
+                {% for result in results %}
+                    <li>{{ result }}</li>
+                {% endfor %}
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}
