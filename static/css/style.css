@@ -136,3 +136,21 @@ a:hover {
     text-decoration: underline;
     color: #0056b3;
 }
+
+.fixed-left {
+    position: fixed;
+    top: 50%;
+    left: 0px;
+    transform: translateY(-50%);
+    width: auto;
+    height: 100%;
+}
+
+.fixed-right {
+    position: fixed;
+    top: 50%;
+    right: 0px;
+    transform: translateY(-50%);
+    width: auto;
+    height: 100%;
+}
