@@ -18,13 +18,13 @@ def __simplify_query_result(sparql_result):
 def search(query: str):
     query = query.lower()
     sparql_query = """
-        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
         BASE <http://example.org/data/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX v: <http://example.org/vocab#>
 
         SELECT ?name ?type WHERE {
             ?s a ?p .
-            ?p foaf:name ?type .
+            ?p rdfs:label ?type .
             {
                 ?s v:hasTitle ?name .
             }
