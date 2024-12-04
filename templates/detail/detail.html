@@ -3,5 +3,8 @@
 {% block page_body %}
 <div class="search-container">
     <h3> Placeholder for Detail page </h3> 
+    {% if data %}
+        <p>Showing detail for: {{ data }}</p>
+    {% endif %}
 </div>
 {% endblock %}

@@ -33,7 +33,7 @@ def search(query: str):
                 ?s v:hasName ?name .
             }
             FILTER (isLiteral(?name) && CONTAINS(LCASE(?name), "%s"))
-        }
+        } ORDER BY ?type ?name
     """ % query
 
     try:
@@ -47,3 +47,7 @@ def search(query: str):
     else:
         results = __simplify_query_result(results)
         return results
+    
+
+def details(query: str):
+    return 0
