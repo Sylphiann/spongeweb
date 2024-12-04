@@ -96,7 +96,7 @@ def literal_details(query: str):
             { ?p rdfs:label "Supervising producer(s)" . } UNION
             { ?p rdfs:label "Technical" . } UNION
             { ?p rdfs:label "Animation supervisor" . }
-        } limit 100
+        } ORDER BY ?label
     """ % (query, query)
     
     try:
@@ -135,7 +135,7 @@ def character_details(query: str):
             { ?p rdfs:label "Spouse" . }
 
             ?res v:hasName ?result .
-        } limit 100
+        } ORDER BY ?label
     """ % (query, query)
     
     try:
@@ -176,7 +176,7 @@ def episode_details(query: str):
             { ?p rdfs:label "Previous Episode" . }
 
             ?res v:hasTitle ?result .
-        } limit 100
+        } ORDER BY ?label
     """ % (query, query)
     
     try:
