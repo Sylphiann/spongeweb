@@ -1,10 +1,97 @@
 {% extends "base.html" %}
 
 {% block page_body %}
-<div class="search-container">
-    <h3> Placeholder for Detail page </h3> 
-    {% if data %}
-        <p>Showing detail for: {{ data }}</p>
-    {% endif %}
+<div class="result-page">
+    <div class="search-container">
+    <h2> Spongebob Query </h2>
+    <form action="/result" method="get">
+        <input type="text" name="query" placeholder="Type to search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="result-container"></div>
+        {% if data %}
+            <p>Showing detail for: {{ data }}</p>
+
+            <div class="detail-result">
+                <strong>Common details</strong>
+                {% if lit %}
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Label</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for literal in lit %}
+                                <tr>
+                                    <td>{{ literal.label }}</td>
+                                    <td>
+                                        {{ literal.result }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No results found.</p>
+                {% endif %}
+            </div>
+            <br>
+            <div class="detail-result">
+                <strong>Character relations</strong>
+                {% if char %}
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Label</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for character in char %}
+                                <tr>
+                                    <td>{{ character.label }}</td>
+                                    <td>
+                                        <a href="/detail?data={{ character.result }}">{{ character.result }}</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No results found.</p>
+                {% endif %}
+            </div>
+            <br>
+            <div class="detail-result">
+                <strong>Episode relations</strong>
+                {% if eps %}
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Label</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for episode in eps %}
+                                <tr>
+                                    <td>{{ episode.label }}</td>
+                                    <td>
+                                        <a href="/detail?data={{ episode.result }}">{{ episode.result }}</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No results found.</p>
+                {% endif %}
+            </div>
+
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
