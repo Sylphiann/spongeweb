@@ -352,6 +352,10 @@ def get_image_external(query : str):
         return None
 
 def get_data_wikidata(query : str):
+    if len(episode_casting(query)) != 0:
+        return None
+    if len(character_details(query)) != 0:
+        return None
     endpoint_url = "https://query.wikidata.org/sparql"
     sparql_query = """
         SELECT DISTINCT ?person ?personLabel ?birthDate ?genderLabel ?nationalityLabel ?occupationLabel ?languageLabel ?placeOfBirthLabel ?educatedAtLabel WHERE {
