@@ -66,14 +66,13 @@ def literal_details(query: str):
                 ?s v:hasTitle "%s" . 
             }
 
-            { ?p rdfs:label "Character name" . } UNION
-            { ?p rdfs:label "URL" . } UNION
-            { ?p rdfs:label "Episode title" . } UNION
+            { ?p rdfs:label "Name" . } UNION
+            { ?p rdfs:label "Wiki URL" . } UNION
+            { ?p rdfs:label "Title" . } UNION
             { ?p rdfs:label "Residence" . } UNION
             { ?p rdfs:label "Occupation" . } UNION
             { ?p rdfs:label "Gender" . } UNION
             { ?p rdfs:label "Classification" . } UNION
-            { ?p rdfs:label "Portrayer" . } UNION
             { ?p rdfs:label "Color" . } UNION
             { ?p rdfs:label "Eye color" . } UNION
             { ?p rdfs:label "Production Code" . } UNION
@@ -83,19 +82,7 @@ def literal_details(query: str):
             { ?p rdfs:label "U.S. premiere time (ET)" . } UNION
             { ?p rdfs:label "Copyright year" . } UNION
             { ?p rdfs:label "U.S. viewers (millions)" . } UNION
-            { ?p rdfs:label "Running time" . } UNION
-            { ?p rdfs:label "Writer(s)" . } UNION
-            { ?p rdfs:label "Storyboard artist(s)" . } UNION
-            { ?p rdfs:label "Storyboard" . } UNION
-            { ?p rdfs:label "Animator(s)" . } UNION
-            { ?p rdfs:label "Creative(s)" . } UNION
-            { ?p rdfs:label "Guest(s)" . } UNION
-            { ?p rdfs:label "Supervising" . } UNION
-            { ?p rdfs:label "Line producer" . } UNION
-            { ?p rdfs:label "Main" . } UNION
-            { ?p rdfs:label "Supervising producer(s)" . } UNION
-            { ?p rdfs:label "Technical" . } UNION
-            { ?p rdfs:label "Animation supervisor" . }
+            { ?p rdfs:label "Running time" . }
         } ORDER BY ?label
     """ % (query, query)
     
