@@ -89,6 +89,42 @@
                     {% endif %}
                 </div>
 
+				<div class="detail-result">
+					{% if charportray %}
+						<strong>Portrayer Details</strong>
+						<table class="result-table">
+							<thead>
+								<tr>
+									<th>Portrayer</th>
+									<th>Explanation</th>
+									<th>Episodes</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for entry in charportray %}
+									<tr>
+										<td>
+											<a href="/detail?data={{ entry.portrayerName }}">{{ entry.portrayerName }}</a>
+										</td>
+										<td>{{ entry.explanation }}</td>
+										<td>
+											<ul>
+												{% for episode in entry.episodes %}
+													<li>
+														<a href="/detail?data={{ episode }}">{{ episode }}</a>
+													</li>
+												{% endfor %}
+											</ul>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					{% else %}
+						<p></p>
+					{% endif %}
+				</div>
+
             {% endif %}
     </div>
 </div>

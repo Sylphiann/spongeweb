@@ -2,6 +2,7 @@ from django.conf import settings
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 from json import dumps
+from collections import defaultdict
 
 
 def __query(query: str):
@@ -49,7 +50,7 @@ def search(query: str):
     else:
         results = __simplify_query_result(results)
         return results
-    
+
 
 def literal_details(query: str):
     sparql_query = """
@@ -99,7 +100,7 @@ def literal_details(query: str):
     else:
         results = __simplify_query_result(results)
         return results
-    
+
 
 def character_details(query: str):
     sparql_query = """
@@ -126,7 +127,7 @@ def character_details(query: str):
             ?res v:hasName ?result .
         } ORDER BY ?label
     """ % (dumps(query), dumps(query))
-    
+
     try:
         results = __query(sparql_query)
     except Exception as e:
@@ -138,7 +139,46 @@ def character_details(query: str):
     else:
         results = __simplify_query_result(results)
         return results
-    
+
+
+def character_details_portrayer(query: str):
+    sparql_query = """
+        BASE <http://proyeksemweb.org/data/>
+        PREFIX v: <http://proyeksemweb.org/vocab#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+        SELECT DISTINCT ?charName ?properti ?portrayerName ?explanation ?episodeTitle WHERE {
+        ?s a <Character>.
+        ?s rdfs:label %s.
+        ?s rdfs:label ?charName .
+        ?s v:hasPortrayer ?bNode.
+        ?bNode v:portrayedBy ?human.
+        ?human rdfs:label ?portrayerName.
+        
+        OPTIONAL { ?bNode v:hasExplanation ?explanation. }
+        OPTIONAL { ?bNode v:inEpisode ?episode. ?episode rdfs:label ?episodeTitle. }
+        
+        BIND ("Portrayer" as ?properti)
+        }
+        ORDER BY DESC(?portrayerName)
+    """ % (
+        dumps(query)
+    )
+
+    try:
+        results = __query(sparql_query)
+    except Exception as e:
+        print(f"Error: {e}")
+        results = None
+
+    if (results is None) or (results is []):
+        raise ValueError(f'Query "{query}": not found')
+    else:
+        results = __simplify_query_result(results)
+        results = group_character_details(results)
+        return results
+
 
 def episode_details(query: str):
     sparql_query = """
@@ -167,7 +207,7 @@ def episode_details(query: str):
             ?res v:hasTitle ?result .
         } ORDER BY ?label
     """ % (dumps(query), dumps(query))
-    
+
     try:
         results = __query(sparql_query)
     except Exception as e:
@@ -179,3 +219,38 @@ def episode_details(query: str):
     else:
         results = __simplify_query_result(results)
         return results
+
+
+def group_character_details(data):
+    grouped_data = defaultdict(
+        lambda: {
+            "portrayerName": None,
+            "explanation": None,
+            "episodes": set(),
+        }
+    )
+
+    for item in data:
+        char_name = item["charName"]
+        portrayer_name = item["portrayerName"]
+        explanation = item.get("explanation", None)
+        episode_title = item.get("episodeTitle", None)
+        if grouped_data[char_name]["portrayerName"] is None:
+            grouped_data[char_name]["portrayerName"] = portrayer_name
+        if grouped_data[char_name]["explanation"] is None and explanation:
+            grouped_data[char_name]["explanation"] = explanation
+        if episode_title:
+            grouped_data[char_name]["episodes"].add(episode_title)
+    results = []
+    for char_name, details in grouped_data.items():
+        results.append(
+            {
+                "charName": char_name,
+                "portrayerName": details["portrayerName"],
+                "explanation": details["explanation"],
+                "episodes": sorted(
+                    details["episodes"]
+                ),
+            }
+        )
+    return results

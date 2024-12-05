@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .query import search, literal_details, character_details, episode_details
+from .query import search, literal_details, character_details, episode_details, character_details_portrayer
 
 # Create your views here.
 
@@ -31,6 +31,6 @@ def detail(request):
         'lit': literal_details(data),
         'char': character_details(data),
         'eps': episode_details(data),
+        'charportray': character_details_portrayer(data),
     }
     return render(request, 'detail/detail.html', context=context)
-
