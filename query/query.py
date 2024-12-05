@@ -254,3 +254,80 @@ def group_character_details(data):
             }
         )
     return results
+
+def episode_casting(query: str):
+    sparql_query = """
+        BASE <http://proyeksemweb.org/data/>
+        PREFIX v: <http://proyeksemweb.org/vocab#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+        SELECT ?roleName ?name ?explanation WHERE {
+            ?episode a <Episode> ;
+                    v:generalInfo ?roleNode .
+            ?episode rdfs:label %s .
+            ?roleNode a <EpisodeRole> ;
+                    ?roleType ?roleValue .
+            ?roleType rdfs:label ?roleName .
+            ?roleValue rdfs:label ?name .
+            OPTIONAL { ?roleNode v:hasRole ?explanation . }
+            FILTER(?roleType IN (
+                v:hasWriters,
+                v:hasStoryboardArtists,
+                v:hasStoryboard,
+                v:hasAnimators,
+                v:hasCreatives,
+                v:hasGuests,
+                v:hasSupervisor,
+                v:hasLineProducer,
+                v:hasMain,
+                v:hasSupervisingProducers,
+                v:hasTechnicals,
+                v:hasAnimationSupervisor
+            ))
+        }
+    """ % (
+        dumps(query)
+    )
+
+    try:
+        results = __query(sparql_query)
+    except Exception as e:
+        print(f"Error: {e}")
+        results = None
+
+    if (results is None) or (results is []):
+        raise ValueError(f'Query "{query}": not found')
+    else:
+        results = __simplify_query_result(results)
+        return results
+
+def char_to_episode(query : str):
+    sparql_query = """
+        BASE <http://proyeksemweb.org/data/>
+        PREFIX v: <http://proyeksemweb.org/vocab#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+        SELECT DISTINCT ?episodeTitle WHERE {
+            ?episode a <Episode> ;
+                    v:hasCharacter ?character ;
+                    rdfs:label ?episodeTitle .
+            ?character rdfs:label %s .
+        }
+        ORDER BY ?episodeTitle
+    """ % (
+        dumps(query)
+    )
+
+    try:
+        results = __query(sparql_query)
+    except Exception as e:
+        print(f"Error: {e}")
+        results = None
+
+    if (results is None) or (results is []):
+        raise ValueError(f'Query "{query}": not found')
+    else:
+        results = __simplify_query_result(results)
+        return results

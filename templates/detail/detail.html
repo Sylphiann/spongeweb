@@ -124,6 +124,59 @@
 						<p></p>
 					{% endif %}
 				</div>
+				<div class="detail-result">
+					{% if epscast %}
+						<strong>Role Details</strong>
+						<table class="result-table">
+							<thead>
+								<tr>
+									<th>Role</th>
+									<th>Name</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for item in epscast %}
+									<tr>
+										<td>{{ item.roleName }}</td>
+										<td>
+											<a href="/detail?data={{ item.name }}">{{ item.name }}</a>
+											{% if item.explanation %}
+												<span>({{ item.explanation }})</span>
+											{% endif %}
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					{% else %}
+						<p></p>
+					{% endif %}
+				</div>
+				<div class="detail-result">
+					{% if epslist %}
+						<strong>Episodes Featuring This Characters</strong>
+						<table class="result-table">
+							<thead>
+								<tr>
+									<th colspan="3">Episodes</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									{% for i in epslist %}
+										<td><a href="/detail?data={{ i.episodeTitle }}">{{ i.episodeTitle }}</a></td>
+										{% if forloop.counter0|divisibleby:3 and not forloop.last %}
+											</tr><tr>
+										{% endif %}
+									{% endfor %}
+								</tr>
+							</tbody>
+						</table>
+					{% else %}
+						<p></p>
+					{% endif %}
+				</div>
+
 
             {% endif %}
     </div>
