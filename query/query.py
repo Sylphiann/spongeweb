@@ -1,6 +1,8 @@
 from django.conf import settings
 from SPARQLWrapper import SPARQLWrapper, JSON
 
+from json import dumps
+
 
 def __query(query: str):
     sparql = SPARQLWrapper(settings.GRAPH_DB_ENDPOINT)
@@ -32,9 +34,9 @@ def search(query: str):
             {
                 ?s v:hasName ?name .
             }
-            FILTER (isLiteral(?name) && CONTAINS(LCASE(?name), "%s"))
+            FILTER (isLiteral(?name) && CONTAINS(LCASE(?name), %s))
         } ORDER BY ?type ?name
-    """ % query
+    """ % dumps(query)
 
     try:
         results = __query(sparql_query)
@@ -59,11 +61,11 @@ def literal_details(query: str):
             ?p ?result .
             ?p rdfs:label ?label .
             {
-                ?s v:hasName "%s" . 
+                ?s v:hasName %s . 
             }
             UNION
             {
-                ?s v:hasTitle "%s" . 
+                ?s v:hasTitle %s . 
             }
 
             { ?p rdfs:label "Name" . } UNION
@@ -84,7 +86,7 @@ def literal_details(query: str):
             { ?p rdfs:label "U.S. viewers (millions)" . } UNION
             { ?p rdfs:label "Running time" . }
         } ORDER BY ?label
-    """ % (query, query)
+    """ % (dumps(query), dumps(query))
     
     try:
         results = __query(sparql_query)
@@ -109,11 +111,11 @@ def character_details(query: str):
                ?p ?res .
             ?p rdfs:label ?label .
             {
-                ?s v:hasName "%s" . 
+                ?s v:hasName %s . 
             }
             UNION
             {
-                ?s v:hasTitle "%s" . 
+                ?s v:hasTitle %s . 
             }
 
             { ?p rdfs:label "Character" . } UNION
@@ -123,7 +125,7 @@ def character_details(query: str):
 
             ?res v:hasName ?result .
         } ORDER BY ?label
-    """ % (query, query)
+    """ % (dumps(query), dumps(query))
     
     try:
         results = __query(sparql_query)
@@ -148,11 +150,11 @@ def episode_details(query: str):
                ?p ?res .
             ?p rdfs:label ?label .
             {
-                ?s v:hasName "%s" . 
+                ?s v:hasName %s . 
             }
             UNION
             {
-                ?s v:hasTitle "%s" . 
+                ?s v:hasTitle %s . 
             }
 
             { ?p rdfs:label "First appearance" . } UNION
@@ -164,7 +166,7 @@ def episode_details(query: str):
 
             ?res v:hasTitle ?result .
         } ORDER BY ?label
-    """ % (query, query)
+    """ % (dumps(query), dumps(query))
     
     try:
         results = __query(sparql_query)
