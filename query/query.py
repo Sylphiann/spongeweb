@@ -18,9 +18,9 @@ def __simplify_query_result(sparql_result):
 def search(query: str):
     query = query.lower()
     sparql_query = """
-        BASE <http://example.org/data/>
+        BASE <http://proyeksemweb.org/data/>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        PREFIX v: <http://example.org/vocab#>
+        PREFIX v: <http://proyeksemweb.org/vocab#>
 
         SELECT ?name ?type WHERE {
             ?s a ?p .
@@ -42,7 +42,7 @@ def search(query: str):
         print(f"Error: {e}")
         results = None
 
-    if (results is None) and (results is []):
+    if (results is None) or (results is []):
         raise ValueError(f"Query \"{query}\": not found")
     else:
         results = __simplify_query_result(results)
@@ -51,8 +51,8 @@ def search(query: str):
 
 def literal_details(query: str):
     sparql_query = """
-        BASE <http://example.org/data>
-        PREFIX v: <http://example.org/vocab#>
+        BASE <http://proyeksemweb.org/data/>
+        PREFIX v: <http://proyeksemweb.org/vocab#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         select ?name ?label ?result where {
             ?s a ?o ;
@@ -105,7 +105,7 @@ def literal_details(query: str):
         print(f"Error: {e}")
         results = None
 
-    if (results is None) and (results is []):
+    if (results is None) or (results is []):
         raise ValueError(f"Query \"{query}\": not found")
     else:
         results = __simplify_query_result(results)
@@ -114,8 +114,8 @@ def literal_details(query: str):
 
 def character_details(query: str):
     sparql_query = """
-        BASE <http://example.org/data>
-        PREFIX v: <http://example.org/vocab#>
+        BASE <http://proyeksemweb.org/data/>
+        PREFIX v: <http://proyeksemweb.org/vocab#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         select ?name ?label ?result where {
             ?s a ?o ;
@@ -129,7 +129,7 @@ def character_details(query: str):
                 ?s v:hasTitle "%s" . 
             }
 
-            { ?p rdfs:label "Characters" . } UNION
+            { ?p rdfs:label "Character" . } UNION
             { ?p rdfs:label "Children" . } UNION
             { ?p rdfs:label "Parents" . } UNION
             { ?p rdfs:label "Spouse" . }
@@ -144,7 +144,7 @@ def character_details(query: str):
         print(f"Error: {e}")
         results = None
 
-    if (results is None) and (results is []):
+    if (results is None) or (results is []):
         raise ValueError(f"Query \"{query}\": not found")
     else:
         results = __simplify_query_result(results)
@@ -153,8 +153,8 @@ def character_details(query: str):
 
 def episode_details(query: str):
     sparql_query = """
-        BASE <http://example.org/data>
-        PREFIX v: <http://example.org/vocab#>
+        BASE <http://proyeksemweb.org/data/>
+        PREFIX v: <http://proyeksemweb.org/vocab#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         select ?name ?label ?result where {
             ?s a ?o ;
@@ -171,9 +171,9 @@ def episode_details(query: str):
             { ?p rdfs:label "First appearance" . } UNION
             { ?p rdfs:label "Latest appearance" . } UNION
             { ?p rdfs:label "Appearance" . } UNION
-            { ?p rdfs:label "Sister episode(s)" . } UNION
-            { ?p rdfs:label "Next Episode" . } UNION
-            { ?p rdfs:label "Previous Episode" . }
+            { ?p rdfs:label "Sister episode" . } UNION
+            { ?p rdfs:label "Next episode" . } UNION
+            { ?p rdfs:label "Previous episode" . }
 
             ?res v:hasTitle ?result .
         } ORDER BY ?label
@@ -185,7 +185,7 @@ def episode_details(query: str):
         print(f"Error: {e}")
         results = None
 
-    if (results is None) and (results is []):
+    if (results is None) or (results is []):
         raise ValueError(f"Query \"{query}\": not found")
     else:
         results = __simplify_query_result(results)
