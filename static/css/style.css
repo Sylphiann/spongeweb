@@ -103,6 +103,7 @@ a:hover {
 
 .result-table {
     width: 500px;
+    table-layout: fixed;
     border-collapse: collapse;
     margin: 20px 0;
     font-size: 16px;
@@ -111,6 +112,7 @@ a:hover {
 
 .result-table th, .result-table td {
     border: 1px solid #ddd;
+    word-wrap: break-word;
     padding: 8px;
 }
 
