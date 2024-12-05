@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .query import search, literal_details, character_details, episode_details, character_details_portrayer, episode_casting, char_to_episode
+from .query import get_data_wikidata, get_image_external, search, literal_details, character_details, episode_details, character_details_portrayer, episode_casting, char_to_episode
 
 # Create your views here.
 
@@ -34,5 +34,9 @@ def detail(request):
         'charportray': character_details_portrayer(data),
         'epscast': episode_casting(data),
         'epslist': char_to_episode(data),
+        'extra': get_data_wikidata(data),
     }
-    return render(request, 'detail/detail.html', context=context)
+    context["urlImage"] = get_image_external(
+        next((item["result"] for item in context['lit'] if item["label"] == "Wiki URL"), None)
+    )
+    return render(request, "detail/detail.html", context=context)

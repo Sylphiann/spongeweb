@@ -8,10 +8,17 @@
             <input type="text" name="query" placeholder="Type to search...">
             <button type="submit">Search</button>
         </form>
-
+		
         <div class="result-container"></div>
             {% if data %}
                 <p>Showing detail for: {{ data }}</p>
+				<div class="image-container">
+					{% if urlImage %}
+						<img src="{{ urlImage }}" alt="Image" class="centered-image">
+					{% else %}
+						<p>No image available for this query.</p>
+					{% endif %}
+				</div>
 
                 <div class="detail-result">
                     <strong>Common details</strong>
@@ -176,6 +183,29 @@
 						<p></p>
 					{% endif %}
 				</div>
+			<div class="detail-result">
+				{% if extra %}
+					<strong>External Data (Wikidata)</strong>
+					<table class="result-table">
+						<thead>
+							<tr>
+								<th>Attribute</th>
+								<th>Value</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for key, value in extra.items %}
+								<tr>
+									<td>{{ key }}</td>
+									<td>{{ value }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				{% else %}
+					<p></p>
+				{% endif %}
+			</div>
 
 
             {% endif %}

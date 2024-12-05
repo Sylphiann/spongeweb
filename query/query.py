@@ -3,6 +3,8 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 
 from json import dumps
 from collections import defaultdict
+import requests
+from bs4 import BeautifulSoup
 
 
 def __query(query: str):
@@ -229,7 +231,6 @@ def group_character_details(data):
             "episodes": set(),
         }
     )
-
     for item in data:
         char_name = item["charName"]
         portrayer_name = item["portrayerName"]
@@ -331,3 +332,67 @@ def char_to_episode(query : str):
     else:
         results = __simplify_query_result(results)
         return results
+
+def get_image_external(query : str):
+    try:
+        response = requests.get(query)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+        infobox = soup.find("aside", class_="portable-infobox")
+        if not infobox:
+            return None
+        image_tag = infobox.find(
+            "img", src=lambda x: x and "static.wikia.nocookie.net" in x
+        )
+        if image_tag:
+            return image_tag["src"]
+        else:
+            return None
+    except Exception as e:
+        return None
+
+def get_data_wikidata(query : str):
+    endpoint_url = "https://query.wikidata.org/sparql"
+    sparql_query = """
+        SELECT DISTINCT ?person ?personLabel ?birthDate ?genderLabel ?nationalityLabel ?occupationLabel ?languageLabel ?placeOfBirthLabel ?educatedAtLabel WHERE {
+            ?person ?label %s@en.
+            OPTIONAL { ?person wdt:P569 ?birthDate. }
+            OPTIONAL { ?person wdt:P27 ?nationality. }
+            OPTIONAL { ?person wdt:P21 ?gender. }
+            OPTIONAL { ?person wdt:P106 ?occupation. }
+            OPTIONAL { ?person wdt:P103 ?language. }
+            OPTIONAL { ?person wdt:P19 ?placeOfBirth. }
+            OPTIONAL { ?person wdt:P69 ?educatedAt. }
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+        }
+    """ % (
+        dumps(query)
+    )
+    try:
+        sparql = SPARQLWrapper(endpoint_url)
+        sparql.setQuery(sparql_query)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+    except Exception as e:
+        print(f"Error: {e}")
+        results = None
+    if (results is None) or (results is []):
+        raise ValueError(f'Query "{query}": not found')
+    else:
+        results = __simplify_query_result(results)
+        aggregated_data = defaultdict(set)
+        for row in results:
+            for key, value in row.items():
+                if (key.endswith("Label") and key != "personLabel"):
+                    aggregated_data[key].add(value)
+        final_data_1 = {key: ", ".join(values) for key, values in aggregated_data.items()}
+        key_mapping = {
+            "genderLabel": "Gender",
+            "nationalityLabel": "Nationality",
+            "occupationLabel": "Occupations",
+            "languageLabel": "Language",
+            "placeOfBirthLabel": "Place of Birth",
+            "educatedAtLabel": "Educated At"
+        }
+        final_data = {key_mapping.get(key, key): value for key, value in final_data_1.items()}
+        return final_data
