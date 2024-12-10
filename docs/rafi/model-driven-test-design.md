@@ -42,7 +42,7 @@ Criteria Used: **Edge Coverage**
 | Q2I3T3     | `invalid-url`                              | None                 |
 | Q3I3T3     | `""` (empty string)                       | None                 |
 
-### Associate Test Paths with Existing Test Cases
+### Associate Test Paths with Existing Test Cases for IDM
 
 1. **Test Value: Q1I1T1**
    - Test Case: `test_valid_url_with_infobox_and_image`
@@ -86,7 +86,7 @@ Criteria Used: **Edge Coverage**
 4. `[start, try, except, return None]` - Exception during HTTP request.
 5. `[start, try, return None]` - Empty query.
 
-### Associate Test Paths with Existing Test Cases
+### Associate Test Paths with Existing Test Cases for CFG
 
 1. **Path 1**
    - Test Case: `test_valid_url_with_infobox_and_image`

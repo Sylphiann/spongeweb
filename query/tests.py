@@ -1,11 +1,11 @@
 from django.test import TestCase
 from unittest.mock import patch
 import requests
-from your_module import get_image_external
+from query.query import get_image_external
 
 class GetImageExternalTest(TestCase):
-    # CFG Test Path 1: Valid URL with infobox and image tag
-    @patch('query.requests.get')
+    # Test Path 1: Valid URL with infobox and image tag
+    @patch('requests.get')
     def test_valid_url_with_infobox_and_image(self, mock_get):
         """
         Test for a valid URL with an infobox containing an image tag.
@@ -19,8 +19,8 @@ class GetImageExternalTest(TestCase):
         result = get_image_external("http://validurl.com")
         self.assertEqual(result, "https://static.wikia.nocookie.net/example.jpg")
 
-    # CFG Test Path 2: Valid URL with infobox but no image tag
-    @patch('query.requests.get')
+    # Test Path 2: Valid URL with infobox but no image tag
+    @patch('requests.get')
     def test_valid_url_with_infobox_no_image(self, mock_get):
         """
         Test for a valid URL with an infobox but no image tag.
@@ -34,8 +34,8 @@ class GetImageExternalTest(TestCase):
         result = get_image_external("http://validurl.com")
         self.assertIsNone(result)
 
-    # CFG Test Path 3: Valid URL with no infobox
-    @patch('query.requests.get')
+    # Test Path 3: Valid URL with no infobox
+    @patch('requests.get')
     def test_valid_url_no_infobox(self, mock_get):
         """
         Test for a valid URL with no infobox.
@@ -49,8 +49,8 @@ class GetImageExternalTest(TestCase):
         result = get_image_external("http://validurl.com")
         self.assertIsNone(result)
 
-    # CFG Test Path 4: Invalid URL causing a request exception
-    @patch('query.requests.get')
+    # Test Path 4: Invalid URL causing a request exception
+    @patch('requests.get')
     def test_invalid_url(self, mock_get):
         """
         Test for an invalid URL causing an exception.
@@ -62,7 +62,7 @@ class GetImageExternalTest(TestCase):
         result = get_image_external("http://invalidurl.com")
         self.assertIsNone(result)
 
-    # CFG Test Path 5: Empty query
+    # Test Path 5: Empty query
     def test_empty_query(self):
         """
         Test for an empty query.
