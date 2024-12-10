@@ -1,17 +1,51 @@
-name: Deploy to VM Instance
+name: Test and Deployment automation
 
 on:
   push:
     branches:
-      - main
+      - '**'
   pull_request:
     branches:
       - main
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python Environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install coverage
+          
+      - name: Run Tests
+        run: |
+          echo "Starting tests"
+          coverage erase
+          coverage run --include="./*/*" --omit="./env/*,./project/*,./manage.py,./templates/*,./static/*" manage.py test .
+          coverage xml -i
+          coverage report -m
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.xml
+
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Connecting to the VM and deploying
